@@ -1,0 +1,19 @@
+*
+
+# do not ignore folders (removing this causes all to be gitignored)
+!*/
+
+# python system
+!.python-version
+!uv.lock
+!pyproject.toml
+
+# git
+!.gitignore
+
+# documentation
+!justfile
+!**/README.md
+
+# code
+!*.py
