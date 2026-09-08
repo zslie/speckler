@@ -1,0 +1,1 @@
+from .config import DMD_HEIGHT, DMD_WIDTH
