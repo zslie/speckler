@@ -1,5 +1,5 @@
-from abc import ABC, Callable, abstractmethod
-from typing import tuple
+from abc import ABC, abstractmethod
+from typing import Callable, Tuple
 
 import numpy as np
 import torch
@@ -27,7 +27,7 @@ class VirtualDMD(BaseDMD):
 
     def __init__(
         self,
-        resolution: tuple[int, int] = (480, 854),
+        resolution: Tuple[int, int] = (480, 854),
         lee_encoder_fn: BinaryLeeEncoderFn | None = None,
     ) -> None:
         self.height, self.width = resolution
@@ -60,7 +60,7 @@ class PhysicalDMD(BaseDMD):
         self,
         display_offset_x: int = 1920,  # X coordinate where extended display begins
         display_offset_y: int = 0,     # Y coordinate offset
-        resolution: tuple[int, int] = (1920, 1080), # (Width, Height)
+        resolution: Tuple[int, int] = (1920, 1080), # (Width, Height)
         window_name: str = "DMD_Projection",
     ) -> None:
         self.width, self.height = resolution

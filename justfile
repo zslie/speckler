@@ -10,10 +10,6 @@ setup:
     uv sync
     uv python pin 3.12
 
-# Run the 60Hz real-time camera/DMD control loop
-run:
-    uv run python runtime/main.py
-
 # Execute pytest suite against environment
 test:
     uv run pytest
@@ -37,3 +33,30 @@ clean:
     rm -rf .venv
     rm -rf .pytest_cache
     rm -rf __pycache__
+
+sync:
+    uv sync
+
+# Run the wavefront shaping pipeline
+#   just run virtual    (Runs PyTorch simulation mode)
+#   just run hardware   (Runs physical DMD + CMOS camera mode)
+run mode="virtual" *args="":
+    @if [ "{{mode}}" = "hardware" ]; then \
+        uv run python -m speckler.main --hardware {{args}}; \
+    elif [ "{{mode}}" = "virtual" ]; then \
+        uv run python -m speckler.main {{args}}; \
+    else \
+        echo "Error: Unknown mode '{{mode}}'. Use 'virtual' or 'hardware'."; \
+        exit 1; \
+    fi
+
+# Shortcut recipes
+virtual *args="":
+    just run virtual {{args}}
+
+hardware *args="":
+    just run hardware {{args}}
+
+# Run test scripts
+align-dmd:
+    uv run python -m speckler.scripts.test_dmd_alignment
