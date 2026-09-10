@@ -49,8 +49,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--target",
         type=int,
-        default=2048,
-        help="Target focal pixel index on CMOS array (default: 2048).",
+        default=600,
+        help="Target focal pixel index on CMOS array (default: 600).",
     )
     parser.add_argument(
         "--elements",
@@ -77,9 +77,8 @@ def main() -> None:
         torch.rand(args.elements, device=device) * 2 * torch.pi
     )
     optimizer = torch.optim.Adam([phi], lr=args.lr)
-    # Simple dummy camera model: Converts complex E-field to raw intensity |E|^2
-    # TODO - make this a class
     cmos_sim = CMOSCameraModel().to(device)
+    # Simple dummy camera model: Converts complex E-field to raw intensity |E|^2
     # cmos_sim = lambda E_field: torch.abs(E_field) ** 2
 
     # Initialize Hardware-In-The-Loop interface
@@ -89,7 +88,6 @@ def main() -> None:
         camera_sim_module=cmos_sim,
         lee_encoder_fn=encode_lee_hologram,
         dmd_resolution=(DMD_WIDTH, DMD_HEIGHT),
-        camera_index=0,
     )
 
     print(f"Starting optimization for {args.steps} steps...")

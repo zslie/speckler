@@ -3,6 +3,7 @@ from typing import Callable, Tuple
 
 import numpy as np
 import torch
+from screeninfo import get_monitors
 
 # Type aliases
 DMDPattern = torch.Tensor | np.ndarray  # Shape: [Height, Width], binary 0 or 1
@@ -56,19 +57,34 @@ import cv2
 class PhysicalDMD(BaseDMD):
     """Hardware interface for HDMI DLP projectors"""
 
-    def __init__(
-        self,
-        display_offset_x: int = 1920,  # X coordinate where extended display begins
-        display_offset_y: int = 0,     # Y coordinate offset
-        resolution: Tuple[int, int] = (1920, 1080), # (Width, Height)
-        window_name: str = "DMD_Projection",
-    ) -> None:
-        self.width, self.height = resolution
-        self.window_name = window_name
-        self.offset_x = display_offset_x
-        self.offset_y = display_offset_y
+    def __init__(self, resolution: None, monitor_index: int = 1) -> None:
+        monitors = get_monitors()
 
-        # Initialize OpenCV full-screen borderless window on secondary screen
+        print("\n--- Display Enumeration ---")
+        for i, m in enumerate(monitors):
+            print(
+                f" Monitor {i}: {m.name} | Resolution: {m.width}x{m.height} | Offset: (x={m.x}, y={m.y})"
+            )
+
+        # Target the extended monitor (index 1) if present
+        if len(monitors) > monitor_index:
+            target_monitor = monitors[monitor_index]
+            self.offset_x = target_monitor.x
+            self.offset_y = target_monitor.y
+            self.width = target_monitor.width
+            self.height = target_monitor.height
+            print(
+                f" -> Directing projection to Monitor {monitor_index} at offset ({self.offset_x}, {self.offset_y})"
+            )
+        else:
+            print(
+                " [!] Secondary monitor not detected! Falling back to primary screen offset (0, 0)."
+            )
+            self.offset_x, self.offset_y = 0, 0
+            self.width, self.height = 854, 480
+
+        # Create named window, slide it to the projector's X/Y offset, then set fullscreen
+        self.window_name = "DMD_Projection"
         cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL)
         cv2.moveWindow(self.window_name, self.offset_x, self.offset_y)
         cv2.setWindowProperty(

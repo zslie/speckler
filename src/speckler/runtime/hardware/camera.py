@@ -51,7 +51,7 @@ class PhysicalCamera(BaseCamera):
                 print(f"Backend Used: {camera_info.backend}\n")
 
                 # Case-insensitive substring search without throwing ValueError
-                if "cmos" in camera_info.name.lower():
+                if "ov2311" in camera_info.name.lower():
                     camera_index = camera_info.index
                     break
 

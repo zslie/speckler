@@ -68,7 +68,7 @@ def build_hitl_pipeline(
     camera_sim_module=None,
     lee_encoder_fn=None,
     dmd_resolution: Tuple[int, int] = (854, 480),
-    camera_index: int = 0,
+    camera_index: int | None = None,
 ) -> HardwareInTheLoop:
     """Factory helper to construct HITL pipelines for testing or hardware execution."""
     if simulation_mode:
@@ -84,6 +84,7 @@ def build_hitl_pipeline(
         )
     else:
         dmd = PhysicalDMD(resolution=dmd_resolution)
+        print("Getting hardware devices... \nCamera Index: {}", camera_index)
         camera = PhysicalCamera(camera_index=camera_index)
 
     return HardwareInTheLoop(dmd=dmd, camera=camera, is_simulation=simulation_mode)

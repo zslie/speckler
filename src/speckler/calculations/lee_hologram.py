@@ -9,7 +9,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # -----------------------------------------------------------------------------
 N_elements = 256  # Control segments
 N_pixels = 64 * 64  # CMOS sensor grid (64x64)
-target_pixel = 2048  # Target focal coordinate
 
 # Carrier spatial frequency for off-axis Lee encoding
 carrier_freq = 4.0
@@ -74,16 +73,19 @@ def forward_pass(phases: torch.Tensor):
 
 
 def compute_pbr_loss(counts: torch.Tensor, target_idx: int):
-    """Computes Negative Peak-to-Background Ratio (PBR) on CMOS counts/intensity."""
-    I_target = counts[target_idx]
+    """Computes Peak-to-Background Ratio across raw camera pixels."""
+    # Flatten array in case it comes from a 2D physical camera frame (e.g. 40x40 = 1600)
+    flat_counts = counts.reshape(-1)
 
-    mask = torch.ones(len(counts), dtype=torch.bool, device=counts.device)
+    I_target = flat_counts[target_idx]
+
+    # Create background mask for all other pixels
+    mask = torch.ones(flat_counts.shape[0], dtype=torch.bool, device=flat_counts.device)
     mask[target_idx] = False
-    I_background = torch.mean(counts[mask])
+    I_background = torch.mean(flat_counts[mask])
 
     pbr = I_target / (I_background + 1e-8)
     return -pbr, pbr
-
 
 class CMOSCameraModel(nn.Module):
     """Differentiable CMOS sensor model simulating intensity-to-digital counts.
