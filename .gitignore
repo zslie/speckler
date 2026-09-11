@@ -14,7 +14,8 @@
 # documentation
 !justfile
 !**/README.md
-!EQUIPMENT.md
+!EQUIPMENT_V1.md
+!EQUIPMENT_V2.md
 
 # code
 !*.py
