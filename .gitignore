@@ -16,6 +16,9 @@
 !**/README.md
 !EQUIPMENT_V1.md
 !EQUIPMENT_V2.md
+!DRIVER_README.md
 
 # code
 !*.py
+
+drivers/

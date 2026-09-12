@@ -26,20 +26,6 @@ for _ in range(3):
 pixel[0] = (0, 0, 255)
 
 print("RP2040_READY")
-
-while True:
-    line = sys.stdin.readline().strip()
-    
-    if line == "LASER_ON":
-        laser.value = True
-        pixel[0] = (255, 0, 0)  # Turn NeoPixel RED when laser is firing
-        print("ACK:LASER_ON")
-    elif line == "LASER_OFF":
-        laser.value = False
-        pixel[0] = (0, 0, 255)  # Turn NeoPixel back to BLUE
-        print("ACK:LASER_OFF")
-    elif line == "STROBE":
-        camera_strobe.value = True
-        time.sleep(0.0001)
-        camera_strobe.value = False
-        print("ACK:STROBED")
+while True: 
+    laser.value = True
+    pixel[0] = (255, 0, 0)  # Turn NeoPixel RED when laser is firing
