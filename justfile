@@ -10,6 +10,9 @@ setup:
     uv sync
     uv python pin 3.12
 
+log-rp2040:
+    uv run --with pyserial python -m serial.tools.miniterm /dev/tty.usbmodem* 115200
+
 # Execute pytest suite against environment
 test:
     uv run pytest
