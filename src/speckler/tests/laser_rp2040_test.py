@@ -22,10 +22,9 @@ for _ in range(3):
     pixel[0] = (0, 0, 0)    # Off
     time.sleep(0.15)
 
-# Blue = Waiting for commands
-pixel[0] = (0, 0, 255)
+RED = (255,0,0)
 
 print("RP2040_READY")
 while True: 
     laser.value = True
-    pixel[0] = (255, 0, 0)  # Turn NeoPixel RED when laser is firing
+    pixel[0] = RED  # Turn NeoPixel RED while laser is firing
