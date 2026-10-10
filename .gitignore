@@ -18,6 +18,9 @@
 !EQUIPMENT_V2.md
 !DRIVER_README.md
 
+#images
+!images/bench/*.jpg
+
 # code
 !*.py
 
