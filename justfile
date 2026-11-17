@@ -63,3 +63,14 @@ hardware *args="":
 # Run test scripts
 align-dmd:
     uv run python -m speckler.scripts.test_dmd_alignment
+
+# CMOS Camera live view and capture tools
+view-camera *args="":
+    uv run python scripts/view_camera.py {{args}}
+
+camera-snapshot *args="":
+    uv run python scripts/view_camera.py --snapshot {{args}}
+
+# DMD projector mirror toggle test (All-On / All-Off)
+test-dmd *args="":
+    uv run python scripts/test_dmd.py {{args}}
